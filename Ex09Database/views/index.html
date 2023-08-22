@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>전체 회원정보 조회</h3>
+    <table border="1">
+        <tr>
+            <th>아이디</th>
+            <th>비밀번호</th>
+            <th>닉네임</th>
+        </tr>
+        {% for item in list %} 
+        <!-- list에서 꺼낸 하나하나의 객체는 item 으로  -->
+        <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.pw}}</td>
+            <td>{{item.nick}}</td>
+            <td><button onclick="selectOne('{{item.id}}')">이 회원정보만 조회</button></td>
+            <td><button
+                onclick="update('{{item.id}}','{{item.pw}}','{{item.nick}}')"
+              >
+                이 회원 정보 수정
+              </button></td>
+              <td><button onclick="location.href='delete/{{item.id}}'">이 회원 삭제</button></td>
+            <!-- '{{item.id}}' : 문자열로 보내기 위해 '' 따옴표 안에 넣어야함. 안그럼 변수로 취급 -->
+        </tr>
+        {% endfor %}
+        <!-- for문 끝 -->
+    </table>
+
+    <h3>특정 회원 정보 조회</h3>
+    <table border="1">
+        <tr>
+            <th>아이디</th>
+            <th>비밀번호</th>
+            <th>닉네임</th>
+        </tr>
+        <tr>
+            <td id="searchId"></td>
+            <td id="searchPw"></td>
+            <td id="searchNick"></td>
+        </tr>
+    </table>
+
+        <h3>회원 추가</h3>
+        <form action="insert" method="post">
+            <input type="text" name="id" ><br>
+            <input type="password" name="pw"><br>
+            <input type="text" name="nick" ><br>
+            <input type="submit">
+        </form>
+
+        <h3>회원 정보 수정</h3>
+        <form action="update" method="post">
+            <input type="text" name="id" id="updateId" readonly><br>
+            <input type="password" name="pw"  id="updatePw"><br>
+            <input type="text" name="nick" id="updateNick"><br>
+            <input type="submit">
+        </form>
+
+    <script>
+        async function selectOne(id){
+
+            const reqURL = 'select/'+id   //요청 URL
+
+            // fetchAPI 사용하기
+            // fetchAPI -> 처음에 오는 response는 promises 형태 
+            // (비동기통신할 때, 이 작업과 다른 작업을 동시에 해줄 수 있는 애)
+            // 값들이 전부 다 넘어오기 전까지는 promises형태로 저장해둠.
+            // -> 얘를 다루려면 json형태로 바꿔주면 훨씬 편함! : res.json() <- 바꿔주기
+            await fetch(reqURL).then((res) =>res.json()).then((res2)=>{//reqURL 사용하여 요청하기
+                // console.log(res2);
+                // res2.member -> array 배열형태
+                // res2.member[0] -> 0번 인덱스에 
+                document.getElementById('searchId').innerText = res2.member[0].id
+                document.getElementById('searchPw').innerText = res2.member[0].pw
+                document.getElementById('searchNick').innerText = res2.member[0].nick
+            })
+            
+          
+
+        }
+        function update(id, pw, nick){
+            document.getElementById('updateId').value = id
+            document.getElementById('updatePw').value = pw
+            document.getElementById('updateNick').value = nick
+           }
+    </script>
+
+</body>
+</html>

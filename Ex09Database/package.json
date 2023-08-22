@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.4.5",
+    "nodeman": "^1.1.2",
+    "nodemon": "^2.0.22",
+    "nunjucks": "^3.2.4"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
+  }
+}
